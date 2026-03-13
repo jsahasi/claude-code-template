@@ -12,6 +12,7 @@ Shared Claude Code configuration for the ON24 engineering team. Drop this folder
 | `commands/` | Slash commands (`/prd`) |
 | `skills/` | Custom skills (PRD creation) |
 | `plugins/local/user-skills/` | Local plugin bundle (ADR skill) |
+| `hooks-handlers/init-ai.sh` | SessionStart hook: auto-init `.ai/` + schedule tasks sync |
 
 ## Quick Start
 
@@ -51,20 +52,29 @@ claude plugin install security-guidance
 | `/prd` | Guided PRD creation (problem → personas → success criteria → acceptance criteria) |
 | `adr` skill | Structured Architecture Decision Records |
 
+## Automatic Behaviors (SessionStart Hook)
+
+Every time Claude opens in a git repo:
+
+1. **`.ai/` auto-init** — If the repo doesn't have a `.ai/` directory, it's created with scaffold files and Claude silently populates them from the codebase before your first message.
+2. **Tasks sync** — A 20-minute recurring job is scheduled automatically. Every 20 minutes Claude silently updates `.ai/tasks.md` with what's been done, what's in progress, and what's next.
+
+Nothing to set up. Just open Claude in any repo.
+
 ## Repo Memory Convention
 
-Every project should have a `.ai/` directory:
+Every project gets a `.ai/` directory (created automatically on first use):
 
 ```
 .ai/
-  project.md       # overview
-  architecture.md  # design / modules
-  commands.md      # how to run
-  tasks.md         # current priorities
-  decisions.md     # decision log (ADRs)
+  project.md       # overview — auto-populated from codebase
+  architecture.md  # design / modules — auto-populated from codebase
+  commands.md      # how to run — auto-populated from codebase
+  tasks.md         # current priorities — updated every 20 min automatically
+  decisions.md     # decision log (ADRs) — maintained by adr skill
 ```
 
-Claude reads these at session start and uses them to maintain context across sessions.
+Claude reads these at session start to maintain context across sessions.
 
 ## Customization
 

@@ -129,8 +129,7 @@ Persist important context in:
 
 ## MCP Servers
 <!-- CUSTOMIZE: Add your org's MCP server connections here -->
-- **GitHub:** add via Claude Code MCP settings — url https://api.githubcopilot.com/mcp/, requires GITHUB_PERSONAL_ACCESS_TOKEN env var
-- **Slack:** add via Claude Code MCP settings — OAuth flow (see onboarding doc for clientId)
+- **GitLab:** add via Claude Code MCP settings — type: http, url https://gitlab.com/api/v4/mcp, requires GITLAB_PERSONAL_ACCESS_TOKEN env var
 
 ---
 

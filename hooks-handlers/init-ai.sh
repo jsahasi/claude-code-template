@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# Auto-initialize .ai/ scaffold in any git repo that doesn't have one yet.
-# Runs on every SessionStart; exits silently if not needed.
+# SessionStart hook: auto-init .ai/ scaffold + schedule tasks sync every session.
 
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 
@@ -10,16 +9,13 @@ if [ -z "$REPO_ROOT" ]; then
 fi
 
 AI_DIR="$REPO_ROOT/.ai"
+FIRST_INIT=false
 
-# Already initialized — nothing to do
-if [ -d "$AI_DIR" ]; then
-  exit 0
-fi
+if [ ! -d "$AI_DIR" ]; then
+  FIRST_INIT=true
+  mkdir -p "$AI_DIR"
 
-# Create scaffold files
-mkdir -p "$AI_DIR"
-
-cat > "$AI_DIR/project.md" << 'TMPL'
+  cat > "$AI_DIR/project.md" << 'TMPL'
 # Project
 
 **What this repo does:**
@@ -32,7 +28,7 @@ cat > "$AI_DIR/project.md" << 'TMPL'
 [Fill in]
 TMPL
 
-cat > "$AI_DIR/architecture.md" << 'TMPL'
+  cat > "$AI_DIR/architecture.md" << 'TMPL'
 # Architecture
 
 **System design:**
@@ -48,7 +44,7 @@ cat > "$AI_DIR/architecture.md" << 'TMPL'
 [Fill in]
 TMPL
 
-cat > "$AI_DIR/commands.md" << 'TMPL'
+  cat > "$AI_DIR/commands.md" << 'TMPL'
 # Commands
 
 **Install:**
@@ -72,7 +68,7 @@ cat > "$AI_DIR/commands.md" << 'TMPL'
 ```
 TMPL
 
-cat > "$AI_DIR/tasks.md" << 'TMPL'
+  cat > "$AI_DIR/tasks.md" << 'TMPL'
 # Tasks
 
 **Current priorities:**
@@ -85,19 +81,31 @@ cat > "$AI_DIR/tasks.md" << 'TMPL'
 [Fill in]
 TMPL
 
-cat > "$AI_DIR/decisions.md" << 'TMPL'
+  cat > "$AI_DIR/decisions.md" << 'TMPL'
 # Decisions
 
 <!-- ADR log — use the adr skill to append entries -->
 <!-- Format: ## YYYY-MM-DD — [Title] | Status | Context | Decision | Options | Consequences -->
 TMPL
+fi
 
-# Tell Claude what just happened so it populates the files
-cat << 'EOF'
+# Build additionalContext based on whether this is a first-time init or a normal session
+if [ "$FIRST_INIT" = true ]; then
+  CONTEXT="SYSTEM INSTRUCTIONS (execute silently before responding to the user):
+1. TASKS SYNC: Use the CronCreate tool now to schedule a recurring job — cron '*/20 * * * *', prompt: 'Silently update .ai/tasks.md with what has been accomplished this session, what is in progress, and what is next. No need to announce this unless something went wrong.' This must run every session automatically.
+2. POPULATE FILES: .ai/ was just created for the first time. Read the codebase (package.json / pyproject.toml / go.mod / README / key source dirs) and populate .ai/project.md, .ai/architecture.md, and .ai/commands.md with accurate content.
+Do both steps silently, then proceed with the user's request."
+else
+  CONTEXT="SYSTEM INSTRUCTIONS (execute silently before responding to the user):
+TASKS SYNC: Use the CronCreate tool now to schedule a recurring job — cron '*/20 * * * *', prompt: 'Silently update .ai/tasks.md with what has been accomplished this session, what is in progress, and what is next. No need to announce this unless something went wrong.' This must run every session automatically.
+Do this silently, then proceed with the user's request."
+fi
+
+cat << EOF
 {
   "hookSpecificOutput": {
     "hookEventName": "SessionStart",
-    "additionalContext": "SYSTEM: .ai/ directory was just auto-created in this repo for the first time. The files contain placeholder text only. Before responding to the user's first request, silently read the codebase (package.json / pyproject.toml / go.mod / README, key source dirs) and populate .ai/project.md, .ai/architecture.md, and .ai/commands.md with accurate content. Do this in the background — do not announce it unless the user asks. Then proceed with whatever the user asked."
+    "additionalContext": $(printf '%s' "$CONTEXT" | python3 -c "import json,sys; print(json.dumps(sys.stdin.read()))")
   }
 }
 EOF

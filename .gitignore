@@ -1,0 +1,39 @@
+# Credentials & secrets
+.credentials.json
+
+# Generated / ephemeral (do not commit)
+backups/
+cache/
+debug/
+statsig/
+todos/
+plugins/cache/
+plugins/marketplaces/
+
+# Session state
+history.jsonl
+mcp-needs-auth-cache.json
+paste-cache/
+plans/
+shell-snapshots/
+stats-cache.json
+tasks/
+telemetry/
+downloads/
+session-env/
+file-history/
+
+# Local overrides (machine-specific)
+settings.local.json
+keybindings.json
+
+# Auto-memory (personal, not shared) — exclude session-specific project dirs
+projects/
+# But keep the onboarding template
+!projects/
+!projects/template/
+!projects/template/memory/
+!projects/template/memory/**
+
+# Word temp files
+~$*

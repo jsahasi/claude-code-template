@@ -1,0 +1,8 @@
+{
+  "name": "user-skills",
+  "description": "ON24 team skills: ADR generation, PRD creation, design workflows",
+  "author": {
+    "name": "ON24 Engineering",
+    "email": "engineering@on24.com"
+  }
+}

@@ -32,6 +32,18 @@
     "slack@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true
   },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks-handlers/init-ai.sh"
+          }
+        ]
+      }
+    ]
+  },
   "outputStyle": "Concise",
   "autoUpdatesChannel": "latest",
   "skipDangerousModePermissionPrompt": true,

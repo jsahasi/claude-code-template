@@ -28,7 +28,6 @@ cp -r /path/to/.claude_on24template ~/.claude
 
 # 3. Install plugins (downloads plugin cache)
 claude plugin install superpowers
-claude plugin install slack
 claude plugin install ralph-loop
 claude plugin install frontend-design
 claude plugin install security-guidance
@@ -52,6 +51,20 @@ claude plugin install security-guidance
 | `/prd` | Guided PRD creation (problem → personas → success criteria → acceptance criteria) |
 | `adr` skill | Structured Architecture Decision Records |
 
+## Why `.ai/` — Not Just `CLAUDE.md`?
+
+`CLAUDE.md` tells the agent **how to behave** — coding conventions, workflow rules, tool permissions. It's stable instructions that rarely change.
+
+`.ai/` captures **living project state** — what's been built, what's in progress, what decisions were made and why. This changes constantly.
+
+Mixing both into `CLAUDE.md` creates problems:
+
+- **Bloat** — volatile state (tasks, decision log) mixed into stable instructions makes the file hard to maintain. People stop updating it.
+- **No automation** — `CLAUDE.md` updates are manual. `.ai/` files are kept current by hooks automatically.
+- **Cross-project discovery** — `.ai/` files have consistent structure across repos, which makes them queryable via MCP. Asking "do we have a service that does X?" across 20 repos works because every repo has an `architecture.md` in the same format — not buried in a `CLAUDE.md` that each team structures differently.
+
+**In short:** `CLAUDE.md` = instructions to the agent. `.ai/` = knowledge about the project. Separate concerns, separately maintained.
+
 ## Automatic Behaviors (SessionStart Hook)
 
 Every time Claude opens in a git repo:
@@ -61,7 +74,7 @@ Every time Claude opens in a git repo:
 
 Nothing to set up. Just open Claude in any repo.
 
-## Repo Memory Convention
+## `.ai/` Directory Structure
 
 Every project gets a `.ai/` directory (created automatically on first use):
 

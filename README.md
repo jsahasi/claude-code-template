@@ -9,10 +9,12 @@ Shared Claude Code configuration for the ON24 engineering team. Drop this folder
 | `CLAUDE.md` | Global instructions loaded into every Claude session |
 | `settings.json` | Tool permissions, output style, env knobs, enabled plugins |
 | `policy-limits.json` | Security: disables remote control |
-| `commands/` | Slash commands (`/prd`) |
+| `commands/` | Slash commands (`/prd`, `/rag`) |
 | `skills/` | Custom skills (PRD creation) |
 | `plugins/local/user-skills/` | Local plugin bundle (ADR, html-docs skills) |
 | `hooks-handlers/init-ai.sh` | SessionStart hook: auto-init `.ai/` + schedule tasks sync |
+| `projects/template/memory/` | Memory index + user profile template |
+| `example-ai/` | Annotated `.ai/` templates to copy into any repo |
 
 ## Quick Start
 
@@ -49,6 +51,7 @@ claude plugin install security-guidance
 | Trigger | What it does |
 |---|---|
 | `/prd` | Guided PRD creation (problem → personas → success criteria → acceptance criteria) |
+| `/rag` | Index and query documents with Retrieval-Augmented Generation |
 | `adr` skill | Structured Architecture Decision Records |
 | `html-docs` skill | Professional HTML doc generation (test plans, security reviews, architecture) |
 

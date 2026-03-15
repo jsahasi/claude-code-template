@@ -10,8 +10,7 @@ Shared Claude Code configuration for the ON24 engineering team. Drop this folder
 | `settings.json` | Tool permissions, output style, env knobs, enabled plugins |
 | `policy-limits.json` | Security: disables remote control |
 | `commands/` | Slash commands (`/prd`, `/rag`) |
-| `skills/` | Custom skills (PRD creation) |
-| `plugins/local/user-skills/` | Local plugin bundle (ADR, html-docs skills) |
+| `plugins/local/user-skills/` | Local plugin bundle (PRD, ADR, html-docs skills) |
 | `hooks-handlers/init-ai.sh` | SessionStart hook: auto-init `.ai/` + schedule tasks sync |
 | `projects/template/memory/` | Memory index + user profile template |
 | `example-ai/` | Annotated `.ai/` templates to copy into any repo |

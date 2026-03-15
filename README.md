@@ -11,7 +11,7 @@ Shared Claude Code configuration for the ON24 engineering team. Drop this folder
 | `policy-limits.json` | Security: disables remote control |
 | `commands/` | Slash commands (`/prd`) |
 | `skills/` | Custom skills (PRD creation) |
-| `plugins/local/user-skills/` | Local plugin bundle (ADR skill) |
+| `plugins/local/user-skills/` | Local plugin bundle (ADR, html-docs skills) |
 | `hooks-handlers/init-ai.sh` | SessionStart hook: auto-init `.ai/` + schedule tasks sync |
 
 ## Quick Start
@@ -50,6 +50,7 @@ claude plugin install security-guidance
 |---|---|
 | `/prd` | Guided PRD creation (problem → personas → success criteria → acceptance criteria) |
 | `adr` skill | Structured Architecture Decision Records |
+| `html-docs` skill | Professional HTML doc generation (test plans, security reviews, architecture) |
 
 ## Why `.ai/` — Not Just `CLAUDE.md`?
 
